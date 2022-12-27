@@ -43,5 +43,5 @@ before_action :is_matching_login_user, only: [:edit, :update]
     if(user_id != login_user_id)
       redirect_to user_path(current_user.id)
     end
-  end
+   end
 end
