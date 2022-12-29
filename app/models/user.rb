@@ -1,6 +1,11 @@
 class User < ApplicationRecord
   # Include default devise modules. Others available are:
   # :confirmable, :lockable, :timeoutable, :trackable and :omniauthable
+  
+  
+  devise :database_authenticatable, :registerable,
+         :recoverable, :rememberable, :validatable
+         
   def follow(user_id)
   relationships.create(followed_id: user_id)
   end
@@ -13,8 +18,19 @@ class User < ApplicationRecord
   followings.include?(user)
   end
   
-  devise :database_authenticatable, :registerable,
-         :recoverable, :rememberable, :validatable
+  def self.looks(search, word)
+    if search == "perfect_match"
+      @user = User.where("name LIKE?", "#{word}")
+    elsif search == "forward_match"
+      @user = User.where("name LIKE?","#{word}%")
+    elsif search == "backward_match"
+      @user = User.where("name LIKE?","%#{word}")
+    elsif search == "partial_match"
+      @user = User.where("name LIKE?","%#{word}%")
+    else
+      @user = User.all
+    end
+  end
 
   has_many :books
   has_many :favorites, dependent: :destroy
