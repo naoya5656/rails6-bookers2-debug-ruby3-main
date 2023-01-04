@@ -59,5 +59,5 @@ before_action :is_matching_login_user, only: [:edit, :update]
     if(user_id != login_user_id)
       redirect_to books_path
     end
-  end
+   end
 end
